@@ -125,10 +125,18 @@ module PayPal::SDK
           class << self
             def get_userinfo(options = {}, http_header = {})
               # Basing this on: https://developer.paypal.com/docs/api/identity/v1/#userinfo
-              #options = { :access_token => options } if options.is_a? String
-              http_header['Authorization'] = 'Bearer ' + options if options.is_a? String
+
+              # Pass in access token as a header
+              if options.is_a? String
+                http_header['Authorization'] = 'Bearer ' + options
+              else
+                http_header['Authorization'] = 'Bearer ' + options[:access_token]
+                options.delete(:access_token)
+              end
+
               http_header['Content-Type'] = 'application/json'
               options = options.merge( :schema => "paypalv1.1" ) unless options[:schema] or options["schema"]
+
               Userinfo.new(api.get(PATH, options, http_header))
             end
             alias_method :get, :get_userinfo
