@@ -120,7 +120,7 @@ module PayPal::SDK
 
         class Userinfo < Base
           include RequestDataType
-          PATH = "v1/identity/openidconnect/userinfo"
+          PATH = "v1/identity/oauth2/userinfo"
 
           class << self
             def get_userinfo(options = {}, http_header = {})
